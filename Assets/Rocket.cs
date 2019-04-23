@@ -26,6 +26,9 @@ public class Rocket : MonoBehaviour
             case "Fuel":
                 print("Fuel");
                 break;
+            case "Unfriendly":
+                print("Dead");
+                break;
             default:
                 print("Dead");
                 break;
