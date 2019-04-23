@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 8878325106850053652}
   - component: {fileID: 673061217464443509}
   m_Layer: 0
-  m_Name: Launch Pad
-  m_TagString: Untagged
+  m_Name: Obstacle
+  m_TagString: Unfriendly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
