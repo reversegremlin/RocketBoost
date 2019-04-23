@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Rocket : MonoBehaviour
     Rigidbody rigidBody;
     AudioSource audioSource;
 
+    int currentLevel = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -18,16 +20,27 @@ public class Rocket : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Scene currentScene = SceneManager.GetActiveScene();
+
         switch (collision.gameObject.tag)
         {
             case "Friendly":
-                print("Ok");
+                //do nothing
                 break;
-            case "Fuel":
-                print("Fuel");
+            case "Finish":
+                print("Hit Finish");
+                //total levels = 2
+                if (currentScene.buildIndex == 1)
+                {
+                    SceneManager.LoadScene(2);
+                } else
+                {
+                    SceneManager.LoadScene(currentScene.buildIndex + 1);
+                }
                 break;
             case "Unfriendly":
                 print("Dead");
+                SceneManager.LoadScene(currentScene.buildIndex);
                 break;
             default:
                 print("Dead");
