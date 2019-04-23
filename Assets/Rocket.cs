@@ -9,7 +9,14 @@ public class Rocket : MonoBehaviour
     Rigidbody rigidBody;
     AudioSource audioSource;
 
-    int currentLevel = 0;
+    enum State
+    {
+        Alive = 0,
+        Dying = 1,
+        Transcending = 2
+    }
+
+    State state = State.Alive;
 
     // Start is called before the first frame update
     void Start()
@@ -30,13 +37,9 @@ public class Rocket : MonoBehaviour
             case "Finish":
                 print("Hit Finish");
                 //total levels = 2
-                if (currentScene.buildIndex == 1)
-                {
-                    SceneManager.LoadScene(2);
-                } else
-                {
-                    SceneManager.LoadScene(currentScene.buildIndex + 1);
-                }
+                state = State.Transcending;
+               Invoke("LoadNextScene", 3f);
+
                 break;
             case "Unfriendly":
                 print("Dead");
@@ -46,6 +49,19 @@ public class Rocket : MonoBehaviour
                 print("Dead");
                 break;
         }
+
+    }
+
+    private void LoadNextScene()
+    {
+        //                Invoke("LoadNextScene", 1f);
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        if (currentScene.buildIndex == 1)
+        {
+            SceneManager.LoadScene(2);
+        }
+        SceneManager.LoadScene(currentScene.buildIndex + 1);
 
     }
 
