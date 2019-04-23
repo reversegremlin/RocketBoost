@@ -622,8 +622,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903a6688afdd54b309f9a9715c15c5e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rcsThrust: 115
-  mainThrust: 35
+  rcsThrust: 250
+  mainThrust: 50
+  mainEngine: {fileID: 8300000, guid: d0ce090284022466fbb05bbd7323812e, type: 3}
+  explosion: {fileID: 8300000, guid: 13a345948b605487894292aef53ba35e, type: 3}
+  win: {fileID: 8300000, guid: f40e79266733d4210b2580efe079cbc7, type: 3}
 --- !u!1 &6678519359588395252
 GameObject:
   m_ObjectHideFlags: 0

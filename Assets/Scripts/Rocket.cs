@@ -7,6 +7,9 @@ public class Rocket : MonoBehaviour
 {
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+    [SerializeField] AudioClip mainEngine;
+    [SerializeField] AudioClip explosion;
+    [SerializeField] AudioClip win;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -37,25 +40,33 @@ public class Rocket : MonoBehaviour
                 //do nothing
                 break;
             case "Finish":
-                print("Hit Finish");
-                state = State.Transcending;
-               Invoke("LoadNextScene", 2f);
+                StartWinSequence();
 
                 break;
             case "Unfriendly":
-                print("Dead");
-                state = State.Dying;
-                //StartCoroutine(AudioController.FadeOut(audioSource, 1f));
-                audioSource.Stop();
-
-                Invoke("ReloadCurrentLevelWithDelay", 3f);
+                StartDeathSequence();
                 break;
             default:
-                print("Dead");
                 break;
         }
 
     }
+
+    private void StartWinSequence()
+    {
+        state = State.Transcending;
+        audioSource.PlayOneShot(win);
+        Invoke("LoadNextScene", 2f);
+    }
+
+    private void StartDeathSequence()
+    {
+        state = State.Dying;
+        audioSource.Stop();
+        audioSource.PlayOneShot(explosion);
+        Invoke("ReloadCurrentLevelWithDelay", 3f);
+    }
+
     void ReloadCurrentLevelWithDelay()
     {
         Scene currentScene = SceneManager.GetActiveScene();
@@ -71,7 +82,6 @@ public class Rocket : MonoBehaviour
             SceneManager.LoadScene(2);
         }
         SceneManager.LoadScene(currentScene.buildIndex + 1);
-
     }
 
     // Update is called once per frame
@@ -87,24 +97,23 @@ public class Rocket : MonoBehaviour
 
     private void Thrust()
     {
-        
+
         if (Input.GetKey(KeyCode.Space))
-        {
-            rigidBody.AddRelativeForce(Vector3.up * mainThrust);
-            //todo no sound when dying
-            if (!audioSource.isPlaying)
-            {
-                StartCoroutine(AudioController.FadeIn(audioSource, 4f));
-
-                //audioSource.Play();
-
-            }
-        }
+            ApplyThrust();
         else
         {
-            StartCoroutine(AudioController.FadeOut(audioSource, 2f));
+            audioSource.Stop();
+        }
+    }
 
-            //audioSource.Stop();
+    private void ApplyThrust()
+    {
+        rigidBody.AddRelativeForce(Vector3.up * mainThrust);
+        //todo no sound when dying
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngine);
+
         }
     }
 
@@ -129,30 +138,5 @@ public class Rocket : MonoBehaviour
         rigidBody.freezeRotation = false; //take manual control of rotation
 
     }
-
-    public static class AudioController
-    {
-        public static IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
-        {
-            float startVolume = audioSource.volume;
-            while (audioSource.volume > 0)
-            {
-                audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
-                yield return null;
-            }
-            audioSource.Stop();
-        }
-        public static IEnumerator FadeIn(AudioSource audioSource, float FadeTime)
-        {
-            audioSource.Play();
-            audioSource.volume = 0f;
-            while (audioSource.volume < 1)
-            {
-                audioSource.volume += Time.deltaTime / FadeTime;
-                yield return null;
-            }
-        }
-    }
-
 
 }
