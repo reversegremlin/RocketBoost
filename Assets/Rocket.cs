@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
@@ -27,7 +29,7 @@ public class Rocket : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Scene currentScene = SceneManager.GetActiveScene();
+        if (state != State.Alive) { return; }
 
         switch (collision.gameObject.tag)
         {
@@ -36,14 +38,17 @@ public class Rocket : MonoBehaviour
                 break;
             case "Finish":
                 print("Hit Finish");
-                //total levels = 2
                 state = State.Transcending;
-               Invoke("LoadNextScene", 3f);
+               Invoke("LoadNextScene", 2f);
 
                 break;
             case "Unfriendly":
                 print("Dead");
-                SceneManager.LoadScene(currentScene.buildIndex);
+                state = State.Dying;
+                //StartCoroutine(AudioController.FadeOut(audioSource, 1f));
+                audioSource.Stop();
+
+                Invoke("ReloadCurrentLevelWithDelay", 3f);
                 break;
             default:
                 print("Dead");
@@ -51,10 +56,14 @@ public class Rocket : MonoBehaviour
         }
 
     }
-
-    private void LoadNextScene()
+    void ReloadCurrentLevelWithDelay()
     {
-        //                Invoke("LoadNextScene", 1f);
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.buildIndex);
+    }
+
+    void LoadNextScene()
+    {
         Scene currentScene = SceneManager.GetActiveScene();
 
         if (currentScene.buildIndex == 1)
@@ -68,8 +77,11 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Thrust();
-        Rotate();
+        if (state == State.Alive)
+        {
+            Thrust();
+            Rotate();
+        }
 
     }
 
@@ -79,16 +91,20 @@ public class Rocket : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rigidBody.AddRelativeForce(Vector3.up * mainThrust);
-
+            //todo no sound when dying
             if (!audioSource.isPlaying)
             {
-                audioSource.Play();
+                StartCoroutine(AudioController.FadeIn(audioSource, 4f));
+
+                //audioSource.Play();
 
             }
         }
         else
         {
-            audioSource.Stop();
+            StartCoroutine(AudioController.FadeOut(audioSource, 2f));
+
+            //audioSource.Stop();
         }
     }
 
@@ -113,5 +129,30 @@ public class Rocket : MonoBehaviour
         rigidBody.freezeRotation = false; //take manual control of rotation
 
     }
+
+    public static class AudioController
+    {
+        public static IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
+        {
+            float startVolume = audioSource.volume;
+            while (audioSource.volume > 0)
+            {
+                audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+                yield return null;
+            }
+            audioSource.Stop();
+        }
+        public static IEnumerator FadeIn(AudioSource audioSource, float FadeTime)
+        {
+            audioSource.Play();
+            audioSource.volume = 0f;
+            while (audioSource.volume < 1)
+            {
+                audioSource.volume += Time.deltaTime / FadeTime;
+                yield return null;
+            }
+        }
+    }
+
 
 }

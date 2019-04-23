@@ -1198,6 +1198,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 6.7834625
       objectReference: {fileID: 0}
+    - target: {fileID: 5205418181820880820, guid: c7241005c1c87f64d9a5ef39a0149d77,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7241005c1c87f64d9a5ef39a0149d77, type: 3}
 --- !u!1001 &1637491963
