@@ -10,6 +10,10 @@ public class Rocket : MonoBehaviour
     [SerializeField] AudioClip mainEngine;
     [SerializeField] AudioClip explosion;
     [SerializeField] AudioClip win;
+    [SerializeField] ParticleSystem mainEngineParticles;
+    [SerializeField] ParticleSystem explosionEngineParticles;
+    [SerializeField] ParticleSystem winParticles;
+    [SerializeField] float levelLoadDelay = 2f;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -56,7 +60,8 @@ public class Rocket : MonoBehaviour
     {
         state = State.Transcending;
         audioSource.PlayOneShot(win);
-        Invoke("LoadNextScene", 2f);
+        winParticles.Play();
+        Invoke("LoadNextScene", levelLoadDelay);
     }
 
     private void StartDeathSequence()
@@ -64,7 +69,8 @@ public class Rocket : MonoBehaviour
         state = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(explosion);
-        Invoke("ReloadCurrentLevelWithDelay", 3f);
+        explosionEngineParticles.Play(); 
+        Invoke("ReloadCurrentLevelWithDelay", levelLoadDelay);
     }
 
     void ReloadCurrentLevelWithDelay()
@@ -103,18 +109,22 @@ public class Rocket : MonoBehaviour
         else
         {
             audioSource.Stop();
+            mainEngineParticles.Stop();
+
         }
     }
 
     private void ApplyThrust()
     {
         rigidBody.AddRelativeForce(Vector3.up * mainThrust);
-        //todo no sound when dying
+
         if (!audioSource.isPlaying)
         {
             audioSource.PlayOneShot(mainEngine);
 
         }
+        mainEngineParticles.Play(); 
+
     }
 
     private void Rotate()
@@ -124,11 +134,7 @@ public class Rocket : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            // time.deltatime = framespeed
-
-
             transform.Rotate(Vector3.forward * rotationThisFrame);
-
         }
         else if (Input.GetKey(KeyCode.D))
         {
