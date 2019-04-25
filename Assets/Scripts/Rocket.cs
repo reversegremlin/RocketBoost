@@ -17,9 +17,7 @@ public class Rocket : MonoBehaviour
 
     Rigidbody rigidBody;
     AudioSource audioSource;
-
-    bool launched = false;
-
+    
     enum State
     {
         PreLaunch = 0,
@@ -105,7 +103,6 @@ public class Rocket : MonoBehaviour
             Thrust();
             Rotate();
         }
-
     }
 
     private void Thrust()
@@ -120,7 +117,6 @@ public class Rocket : MonoBehaviour
         {
             audioSource.Stop();
             mainEngineParticles.Stop();
-
         }
     }
 
