@@ -18,14 +18,17 @@ public class Rocket : MonoBehaviour
     Rigidbody rigidBody;
     AudioSource audioSource;
 
+    bool launched = false;
+
     enum State
     {
-        Alive = 0,
-        Dying = 1,
-        Transcending = 2
+        PreLaunch = 0,
+        Alive = 1,
+        Dying = 2,
+        Transcending = 3
     }
 
-    State state = State.Alive;
+    State state = State.PreLaunch;
 
     // Start is called before the first frame update
     void Start()
@@ -93,7 +96,11 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (state == State.Alive)
+        if (state == State.PreLaunch)
+        {
+            Thrust();
+        }
+        else if (state == State.Alive)
         {
             Thrust();
             Rotate();
@@ -105,7 +112,10 @@ public class Rocket : MonoBehaviour
     {
 
         if (Input.GetKey(KeyCode.Space))
+        {
             ApplyThrust();
+            if (state == State.PreLaunch) { state = State.Alive; }
+        }
         else
         {
             audioSource.Stop();
