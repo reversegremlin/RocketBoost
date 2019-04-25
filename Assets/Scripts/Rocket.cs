@@ -17,7 +17,9 @@ public class Rocket : MonoBehaviour
 
     Rigidbody rigidBody;
     AudioSource audioSource;
-    
+
+    int lastScene = 3;
+
     enum State
     {
         PreLaunch = 0,
@@ -84,11 +86,14 @@ public class Rocket : MonoBehaviour
     {
         Scene currentScene = SceneManager.GetActiveScene();
 
-        if (currentScene.buildIndex == 1)
+        if (currentScene.buildIndex < lastScene)
         {
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(currentScene.buildIndex + 1);
+
+        } else
+        {
+            SceneManager.LoadScene(lastScene);
         }
-        SceneManager.LoadScene(currentScene.buildIndex + 1);
     }
 
     // Update is called once per frame
