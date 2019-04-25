@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80edb9035a06d4ec5a171211b167d2cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementVector: {x: 0, y: 20, z: 0}
-  period: 2
+  movementVector: {x: 0, y: 15, z: 0}
+  period: 4
   movementFactor: 0
 --- !u!1001 &195080862
 PrefabInstance:
@@ -507,7 +507,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 0
-  m_Color: {r: 1, g: 0, b: 0.87243366, a: 1}
+  m_Color: {r: 0.9245283, g: 0.7718939, b: 0.9047756, a: 1}
   m_Intensity: 4
   m_Range: 200
   m_SpotAngle: 46
