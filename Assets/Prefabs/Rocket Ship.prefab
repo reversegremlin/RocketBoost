@@ -42,7 +42,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 16
+  m_Intensity: 4
   m_Range: 35
   m_SpotAngle: 48
   m_CookieSize: 10
@@ -774,6 +774,7 @@ MonoBehaviour:
   explosionEngineParticles: {fileID: 3118264187722073206}
   winParticles: {fileID: 1363611260374887366}
   levelLoadDelay: 2
+  debugEnabled: 1
 --- !u!1 &6678519359588395252
 GameObject:
   m_ObjectHideFlags: 0

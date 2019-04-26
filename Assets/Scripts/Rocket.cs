@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,11 +15,15 @@ public class Rocket : MonoBehaviour
     [SerializeField] ParticleSystem explosionEngineParticles;
     [SerializeField] ParticleSystem winParticles;
     [SerializeField] float levelLoadDelay = 2f;
+    [SerializeField] bool debugEnabled = true;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
 
-    int lastScene = 3;
+    int finishScene = 4;
+    bool collisionsEnabled = true;
+
+    bool particlesEnabled = false;
 
     enum State
     {
@@ -33,6 +38,12 @@ public class Rocket : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        if (Debug.isDebugBuild)
+        {
+            debugEnabled = true;
+        }
+
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -48,22 +59,23 @@ public class Rocket : MonoBehaviour
                 break;
             case "Finish":
                 StartWinSequence();
-
                 break;
             case "Unfriendly":
-                StartDeathSequence();
+                if (collisionsEnabled == true)
+                {
+                    StartDeathSequence();
+                }
                 break;
             default:
                 break;
         }
-
     }
 
     private void StartWinSequence()
     {
         state = State.Transcending;
         audioSource.PlayOneShot(win);
-        winParticles.Play();
+        if (particlesEnabled) { winParticles.Play(); }
         Invoke("LoadNextScene", levelLoadDelay);
     }
 
@@ -72,7 +84,7 @@ public class Rocket : MonoBehaviour
         state = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(explosion);
-        explosionEngineParticles.Play(); 
+        if (particlesEnabled) { explosionEngineParticles.Play(); }
         Invoke("ReloadCurrentLevelWithDelay", levelLoadDelay);
     }
 
@@ -86,19 +98,20 @@ public class Rocket : MonoBehaviour
     {
         Scene currentScene = SceneManager.GetActiveScene();
 
-        if (currentScene.buildIndex < lastScene)
+        if (currentScene.buildIndex < finishScene)
         {
             SceneManager.LoadScene(currentScene.buildIndex + 1);
-
-        } else
+        } 
+        else
         {
-            SceneManager.LoadScene(lastScene);
+            SceneManager.LoadScene(finishScene);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if (state == State.PreLaunch)
         {
             Thrust();
@@ -107,6 +120,21 @@ public class Rocket : MonoBehaviour
         {
             Thrust();
             Rotate();
+        }
+        if (debugEnabled == true)
+        {
+            RespondToDebugKeys();
+        }
+    }
+
+    private void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextScene();
+        } else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionsEnabled = !collisionsEnabled;
         }
     }
 
@@ -134,7 +162,8 @@ public class Rocket : MonoBehaviour
             audioSource.PlayOneShot(mainEngine);
 
         }
-        mainEngineParticles.Play(); 
+        if (particlesEnabled) { mainEngineParticles.Play(); }
+         
 
     }
 
@@ -153,7 +182,5 @@ public class Rocket : MonoBehaviour
         }
 
         rigidBody.freezeRotation = false; //take manual control of rotation
-
     }
-
 }
