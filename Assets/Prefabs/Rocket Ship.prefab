@@ -47,7 +47,7 @@ Light:
   m_SpotAngle: 48
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -116,7 +116,7 @@ Light:
   m_SpotAngle: 49
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -770,7 +770,6 @@ MonoBehaviour:
   mainEngine: {fileID: 8300000, guid: d0ce090284022466fbb05bbd7323812e, type: 3}
   explosion: {fileID: 8300000, guid: 13a345948b605487894292aef53ba35e, type: 3}
   win: {fileID: 8300000, guid: f40e79266733d4210b2580efe079cbc7, type: 3}
-  backgroundMusic: {fileID: 8300000, guid: 27a6209e55cfd4f9d802d464698aa69f, type: 3}
   mainEngineParticles: {fileID: 5744423959473031976}
   explosionEngineParticles: {fileID: 3118264187722073206}
   winParticles: {fileID: 1363611260374887366}
