@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Levels/Opening.unity
+    guid: c4d3368b4db2a44cc9f710599611153a
+  - enabled: 1
     path: Assets/Levels/Simple Obstacle.unity
     guid: 70890a76995572847ac68cdf44cb25c0
   - enabled: 1
