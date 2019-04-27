@@ -26,8 +26,6 @@ public class Rocket : MonoBehaviour
     int finishScene = 4;
     bool collisionsEnabled = true;
 
-    bool particlesEnabled = true;
-
     enum State
     {
         PreLaunch = 0,
@@ -79,7 +77,7 @@ public class Rocket : MonoBehaviour
     {
         state = State.Transcending;
         audioSource.PlayOneShot(win);
-        if (particlesEnabled) { winParticles.Play(); }
+        winParticles.Play();
         Invoke("LoadNextScene", levelLoadDelay);
     }
 
@@ -88,7 +86,7 @@ public class Rocket : MonoBehaviour
         state = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(explosion);
-        if (particlesEnabled) { explosionEngineParticles.Play(); }
+        explosionEngineParticles.Play();
         Invoke("ReloadCurrentLevelWithDelay", levelLoadDelay);
     }
 
@@ -166,7 +164,7 @@ public class Rocket : MonoBehaviour
             audioSource.PlayOneShot(mainEngine);
 
         }
-        if (particlesEnabled) { mainEngineParticles.Play(); }
+        mainEngineParticles.Play();
          
 
     }
