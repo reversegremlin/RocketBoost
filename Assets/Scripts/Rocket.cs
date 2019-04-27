@@ -8,12 +8,15 @@ public class Rocket : MonoBehaviour
 {
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+
     [SerializeField] AudioClip mainEngine;
     [SerializeField] AudioClip explosion;
     [SerializeField] AudioClip win;
+
     [SerializeField] ParticleSystem mainEngineParticles;
     [SerializeField] ParticleSystem explosionEngineParticles;
     [SerializeField] ParticleSystem winParticles;
+
     [SerializeField] float levelLoadDelay = 2f;
     [SerializeField] bool debugEnabled = true;
 
@@ -23,7 +26,7 @@ public class Rocket : MonoBehaviour
     int finishScene = 4;
     bool collisionsEnabled = true;
 
-    bool particlesEnabled = false;
+    bool particlesEnabled = true;
 
     enum State
     {
@@ -46,6 +49,7 @@ public class Rocket : MonoBehaviour
 
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
+
     }
 
     void OnCollisionEnter(Collision collision)
@@ -98,13 +102,13 @@ public class Rocket : MonoBehaviour
     {
         Scene currentScene = SceneManager.GetActiveScene();
 
-        if (currentScene.buildIndex < finishScene)
+        if (currentScene.buildIndex < SceneManager.sceneCountInBuildSettings)
         {
             SceneManager.LoadScene(currentScene.buildIndex + 1);
         } 
         else
         {
-            SceneManager.LoadScene(finishScene);
+            SceneManager.LoadScene(SceneManager.sceneCountInBuildSettings);
         }
     }
 
